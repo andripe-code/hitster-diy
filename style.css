@@ -1,20 +1,52 @@
+/* Estilos básicos para a página */
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #222;
-    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
 }
 
-button {
-    font-size: 20px;
-    margin: 10px;
-    padding: 10px;
-    cursor: pointer;
+h1 {
+    color: #1db954;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
-video {
+#camera {
     width: 100%;
     max-width: 400px;
-    border: 2px solid white;
-    margin-top: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+#scan {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1db954;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#scan:hover {
+    background-color: #1ed760;
+}
+
+#spotifyPlayerContainer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Estilo de borda do QR Code */
+#camera {
+    border: 2px solid #1db954;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
