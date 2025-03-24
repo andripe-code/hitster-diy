@@ -1,17 +1,57 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hitster Clone</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Jogo do QR Code Spotify</title>
+    <style>
+        /* Estilos básicos para a página */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        #camera {
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        #scan {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #1db954;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #spotifyPlayerContainer {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hitster Clone</h1>
+    <h1>Escaneie o QR Code do Spotify</h1>
+
+    <!-- Elemento de vídeo para mostrar a câmera -->
     <video id="camera" autoplay></video>
-    <button id="scan">📷 Escanear QR Code</button>
-    <button id="play">▶️ Play</button>
-    <button id="pause">⏸️ Pause</button>
+
+    <!-- Botão para iniciar a leitura do QR Code -->
+    <button id="scan">Escanear QR Code</button>
+
+    <!-- Container para o player embutido do Spotify -->
+    <div id="spotifyPlayerContainer"></div>
+
+    <!-- Link para a biblioteca jsQR -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+
+    <!-- Nosso script.js -->
     <script src="script.js"></script>
 </body>
 </html>
