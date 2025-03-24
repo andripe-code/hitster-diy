@@ -40,6 +40,26 @@ h1 {
     background-color: #1ed760;
 }
 
+#controls {
+    margin-top: 20px;
+}
+
+#controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1db954;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#controls button:hover {
+    background-color: #1ed760;
+}
+
 #spotifyPlayerContainer {
     margin-top: 20px;
     text-align: center;
