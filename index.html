@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo do QR Code Spotify</title>
+    <title>Jogo do QR Code de Música</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Escaneie o QR Code do Spotify</h1>
+    <h1>Escaneie o QR Code para Tocar Música</h1>
 
     <!-- Elemento de vídeo para mostrar a câmera -->
     <video id="camera" autoplay></video>
 
     <!-- Botão para iniciar a leitura do QR Code -->
     <button id="scan">Escanear QR Code</button>
+
+    <!-- Botões de Play e Pause -->
+    <div id="controls" style="display:none;">
+        <button id="playBtn">Play</button>
+        <button id="pauseBtn">Pause</button>
+    </div>
 
     <!-- Container para o player embutido do Spotify -->
     <div id="spotifyPlayerContainer"></div>
@@ -25,4 +31,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
