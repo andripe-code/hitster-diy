@@ -1,5 +1,24 @@
 let currentStream = null; // Armazenar o stream da câmera
+let audioPlayer = null;   // Player de áudio
+let currentMusic = null;  // Música atual
+let currentTrackId = null; // ID do track
 
+// Função para configurar o player de música
+function setupPlayer(trackUrl) {
+    // Criar um player de áudio simples (para qualquer música)
+    audioPlayer = new Audio(trackUrl);
+    audioPlayer.controls = true; // Ativar controles padrão
+    document.getElementById('spotifyPlayerContainer').innerHTML = ''; // Limpar conteúdo anterior
+    document.getElementById('spotifyPlayerContainer').appendChild(audioPlayer);
+    document.getElementById('controls').style.display = 'block'; // Mostrar controles de play/pause
+
+    // Aguardar o player carregar
+    audioPlayer.oncanplay = () => {
+        audioPlayer.play();
+    };
+}
+
+// Função para escanear o QR Code
 document.getElementById('scan').addEventListener('click', async () => {
     const video = document.getElementById('camera');
     const canvas = document.createElement("canvas");
@@ -28,18 +47,24 @@ document.getElementById('scan').addEventListener('click', async () => {
                 if (code) {
                     alert("QR Code detectado: " + code.data);
 
-                    // Verificação do link do Spotify
+                    // Se for um link do Spotify
                     if (code.data.includes("spotify.com")) {
-                        // Extrair o ID da música ou playlist do link do Spotify
                         const trackId = code.data.split("track:")[1] || code.data.split("playlist:")[1];
+                        currentTrackId = trackId;
 
-                        // Gerar o código do iframe para embutir o player
                         const iframe = `<iframe src="https://open.spotify.com/embed/track/${trackId}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
-                        
-                        // Inserir o player na página
                         document.getElementById("spotifyPlayerContainer").innerHTML = iframe;
+
+                        // Ativar controles play/pause para o player do Spotify
+                        document.getElementById('playBtn').addEventListener('click', () => {
+                            document.querySelector('iframe').contentWindow.postMessage('{"command":"play"}', '*');
+                        });
+                        document.getElementById('pauseBtn').addEventListener('click', () => {
+                            document.querySelector('iframe').contentWindow.postMessage('{"command":"pause"}', '*');
+                        });
                     } else {
-                        alert("Esse QR Code não é do Spotify.");
+                        // Se for qualquer outro link de música
+                        setupPlayer(code.data);
                     }
                 }
             }
@@ -50,5 +75,18 @@ document.getElementById('scan').addEventListener('click', async () => {
 
     } catch (error) {
         alert("Erro ao acessar a câmera: " + error.message);
+    }
+});
+
+// Funções de play e pause
+document.getElementById('playBtn').addEventListener('click', () => {
+    if (audioPlayer) {
+        audioPlayer.play();
+    }
+});
+
+document.getElementById('pauseBtn').addEventListener('click', () => {
+    if (audioPlayer) {
+        audioPlayer.pause();
     }
 });
