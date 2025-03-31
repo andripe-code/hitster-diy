@@ -4,33 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hitster Game</title>
-  <!-- Biblioteca para ler QR Codes -->
+  <!-- Bibliotecas -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
-  <!-- Player do Spotify (só para desktop) -->
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
-  <!-- Ícones do Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* (Mantenha os estilos anteriores e adicione:) */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #1DB954;
+    }
+    .controls {
+      margin: 20px 0;
+    }
+    button {
+      background: #1DB954;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #1ed760;
+    }
+    #camera {
+      width: 100%;
+      max-width: 300px;
+      border: 2px solid #1DB954;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    #camera-container {
+      margin: 20px 0;
+    }
+    #status {
+      font-weight: bold;
+      color: #333;
+    }
+    .hidden {
+      display: none;
+    }
+    .error-message {
+      color: #ff4444;
+      font-weight: bold;
+      margin: 15px 0;
+    }
     .mobile-warning {
-      background: #ffeb3b;
+      background: #fff3cd;
       padding: 10px;
       border-radius: 5px;
       margin: 10px 0;
-      display: none;
     }
     #mobile-player {
       margin: 20px 0;
-      display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🎵 Hitster Game</h1>
+    <div id="error-container" class="error-message" style="display: none;"></div>
     
     <!-- Aviso para mobile -->
-    <div id="mobile-warning" class="mobile-warning">
+    <div id="mobile-warning" class="mobile-warning hidden">
       <p><i class="fas fa-info-circle"></i> No celular, a música abrirá no app do Spotify. Escaneie o QR code novamente para a próxima música.</p>
     </div>
 
@@ -45,8 +97,8 @@
       <!-- Player para Desktop (oculto) -->
       <div id="desktop-player" style="display: none;"></div>
       
-      <!-- Player para Mobile (link) -->
-      <div id="mobile-player">
+      <!-- Player para Mobile -->
+      <div id="mobile-player" class="hidden">
         <a id="mobile-play-link" target="_blank" class="button">
           <i class="fas fa-external-link-alt"></i> Abrir no Spotify
         </a>
@@ -61,7 +113,7 @@
       
       <!-- Câmera para escanear QR code -->
       <div id="camera-container">
-        <video id="camera" autoplay></video>
+        <video id="camera" autoplay playsinline></video>
         <button id="scan-btn"><i class="fas fa-camera"></i> Escanear QR Code</button>
       </div>
       
@@ -70,163 +122,6 @@
     </div>
   </div>
 
-  <script>
-    // ===== DETECÇÃO DE DISPOSITIVO ===== //
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    // ===== CONFIGURAÇÕES DO APP SPOTIFY ===== //
-    const CLIENT_ID = 'SEU_CLf114a11b46e34abd89dd962963c9f155IENT_ID_AQUI';
-    const REDIRECT_URI = window.location.href.includes('github.io') 
-      ? 'https://andripe-code.github.io/hitster-diy'
-      : 'http://localhost:3000';
-    
-    const SCOPES = 'streaming user-read-email user-read-private';
-    const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}&show_dialog=true`;
-
-    // ===== VARIÁVEIS GLOBAIS ===== //
-    let player;
-    let currentTrack = null;
-    let isScanning = false;
-    let accessToken = null;
-
-    // ===== INICIALIZAÇÃO ===== //
-    document.addEventListener('DOMContentLoaded', function() {
-      // Mostra aviso se for mobile
-      if (isMobile) {
-        document.getElementById('mobile-warning').style.display = 'block';
-      }
-
-      // Verifica autenticação
-      const hash = window.location.hash.substring(1);
-      const params = new URLSearchParams(hash);
-      
-      if (params.has('access_token')) {
-        accessToken = params.get('access_token');
-        initGame();
-      } else {
-        document.getElementById('login-btn').addEventListener('click', function() {
-          window.location.href = AUTH_URL;
-        });
-      }
-    });
-
-    // ===== FUNÇÕES PRINCIPAIS ===== //
-    function initGame() {
-      document.getElementById('login-section').classList.add('hidden');
-      document.getElementById('game-section').classList.remove('hidden');
-      
-      // Configura player baseado no dispositivo
-      if (!isMobile) {
-        initDesktopPlayer();
-      } else {
-        document.getElementById('mobile-player').style.display = 'block';
-      }
-
-      // Configura controles
-      document.getElementById('scan-btn').addEventListener('click', startCamera);
-      document.getElementById('next-btn').addEventListener('click', startCamera);
-    }
-
-    function initDesktopPlayer() {
-      window.onSpotifyWebPlaybackSDKReady = () => {
-        player = new Spotify.Player({
-          name: 'Hitster Game',
-          getOAuthToken: cb => { cb(accessToken); },
-          volume: 0.5
-        });
-
-        player.connect().then(success => {
-          if (success) {
-            console.log('Player conectado!');
-            // Ativa controles para desktop
-            document.getElementById('play-btn').addEventListener('click', () => player.resume());
-            document.getElementById('pause-btn').addEventListener('click', () => player.pause());
-          }
-        });
-      };
-    }
-
-    // Função para iniciar a câmera
-    function startCamera() {
-      const video = document.getElementById('camera');
-      const status = document.getElementById('status');
-
-      if (isScanning) {
-        video.style.display = 'none';
-        isScanning = false;
-        status.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Aguardando escaneamento...';
-        return;
-      }
-
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-        .then(stream => {
-          video.srcObject = stream;
-          video.style.display = 'block';
-          isScanning = true;
-          status.innerHTML = '<i class="fas fa-camera"></i> Aponte para um QR code do Spotify...';
-          scanQRCode(video);
-        })
-        .catch(err => {
-          status.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Erro na câmera: ${err.message}`;
-        });
-    }
-
-    // Função para escanear QR code
-    function scanQRCode(video) {
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      const status = document.getElementById('status');
-
-      function tick() {
-        if (video.readyState === video.HAVE_ENOUGH_DATA) {
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-          const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-          if (code && code.data.includes('spotify.com')) {
-            handleSpotifyLink(code.data);
-            video.style.display = 'none';
-            isScanning = false;
-            return;
-          }
-        }
-        requestAnimationFrame(tick);
-      }
-      tick();
-    }
-
-    // Função para lidar com links do Spotify
-    function handleSpotifyLink(url) {
-      const status = document.getElementById('status');
-      
-      if (isMobile) {
-        // Mobile: Abre no app do Spotify
-        const spotifyUri = url.replace('https://open.spotify.com', 'spotify');
-        document.getElementById('mobile-play-link').href = spotifyUri;
-        status.innerHTML = '<i class="fas fa-check-circle"></i> Música pronta! Clique em "Abrir no Spotify"';
-      } else {
-        // Desktop: Toca no Web Player
-        playOnDesktopPlayer(url);
-        status.innerHTML = '<i class="fas fa-check-circle"></i> Música tocando!';
-      }
-    }
-
-    function playOnDesktopPlayer(url) {
-      const trackId = url.split('/').pop().split('?')[0];
-      fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-      })
-        .then(response => response.json())
-        .then(data => {
-          currentTrack = data.uri;
-          player.play({ uris: [currentTrack] });
-        })
-        .catch(err => {
-          document.getElementById('status').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro ao carregar música';
-        });
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
