@@ -1,78 +1,56 @@
-/* Estilos básicos para a página */
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    text-align: center;
+    background-color: #f0f0f0;
     margin: 0;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-h1 {
-    color: #1db954;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-#camera {
-    width: 100%;
-    max-width: 400px;
-    border: 1px solid #ccc;
-    margin-bottom: 20px;
-    border-radius: 8px;
-}
-
-#scan {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #1db954;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-#scan:hover {
-    background-color: #1ed760;
-}
-
-#controls {
-    margin-top: 20px;
-}
-
-#controls button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #1db954;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin: 5px;
-    transition: background-color 0.3s ease;
-}
-
-#controls button:hover {
-    background-color: #1ed760;
-}
-
-#spotifyPlayerContainer {
-    margin-top: 20px;
-    text-align: center;
-}
-
-#error-message {
-    margin-top: 10px;
-    font-size: 16px;
-    text-align: center;
-}
-
-/* Estilo de borda do QR Code */
-#camera {
-    border: 2px solid #1db954;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+  }
+  
+  h1 {
+    color: #1DB954; /* Verde do Spotify */
+  }
+  
+  .controls {
+    margin: 20px 0;
+  }
+  
+  button {
+    background: #1DB954;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background: #1ed760;
+  }
+  
+  #camera {
+    width: 100%;
+    max-width: 300px;
+    border: 2px solid #1DB954;
+    border-radius: 5px;
+    margin: 10px 0;
+  }
+  
+  #camera-container {
+    margin: 20px 0;
+  }
+  
+  #status {
+    font-weight: bold;
+    color: #333;
+  }
