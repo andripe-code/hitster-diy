@@ -1,6 +1,5 @@
 let currentStream = null; // Armazenar o stream da câmera
 let audioPlayer = null;   // Player de áudio
-let currentMusic = null;  // Música atual
 let currentTrackId = null; // ID do track
 
 // Função para configurar o player de música
@@ -45,26 +44,34 @@ document.getElementById('scan').addEventListener('click', async () => {
                 const code = jsQR(imageData.data, imageData.width, imageData.height);
 
                 if (code) {
-                    alert("QR Code detectado: " + code.data);
+                    const qrData = code.data.trim();
 
-                    // Se for um link do Spotify
-                    if (code.data.includes("spotify.com")) {
-                        const trackId = code.data.split("track:")[1] || code.data.split("playlist:")[1];
-                        currentTrackId = trackId;
+                    // Limpar qualquer mensagem de erro
+                    document.getElementById('error-message').style.display = 'none';
 
-                        const iframe = `<iframe src="https://open.spotify.com/embed/track/${trackId}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
-                        document.getElementById("spotifyPlayerContainer").innerHTML = iframe;
+                    // Verificar se o QR Code é um link do Spotify
+                    if (qrData.includes("spotify.com")) {
+                        const trackId = qrData.split("track:")[1] || qrData.split("playlist:")[1];
 
-                        // Ativar controles play/pause para o player do Spotify
-                        document.getElementById('playBtn').addEventListener('click', () => {
-                            document.querySelector('iframe').contentWindow.postMessage('{"command":"play"}', '*');
-                        });
-                        document.getElementById('pauseBtn').addEventListener('click', () => {
-                            document.querySelector('iframe').contentWindow.postMessage('{"command":"pause"}', '*');
-                        });
+                        if (trackId) {
+                            currentTrackId = trackId;
+                            const iframe = `<iframe src="https://open.spotify.com/embed/track/${trackId}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
+                            document.getElementById("spotifyPlayerContainer").innerHTML = iframe;
+
+                            // Ativar controles play/pause para o player do Spotify
+                            document.getElementById('playBtn').addEventListener('click', () => {
+                                document.querySelector('iframe').contentWindow.postMessage('{"command":"play"}', '*');
+                            });
+                            document.getElementById('pauseBtn').addEventListener('click', () => {
+                                document.querySelector('iframe').contentWindow.postMessage('{"command":"pause"}', '*');
+                            });
+                        }
+                    } else if (qrData.startsWith("http://") || qrData.startsWith("https://")) {
+                        // Se for um link de áudio (qualquer outro link de música)
+                        setupPlayer(qrData);
                     } else {
-                        // Se for qualquer outro link de música
-                        setupPlayer(code.data);
+                        // Exibir mensagem de erro caso não seja um QR válido
+                        document.getElementById('error-message').style.display = 'block';
                     }
                 }
             }

@@ -65,6 +65,12 @@ h1 {
     text-align: center;
 }
 
+#error-message {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
 /* Estilo de borda do QR Code */
 #camera {
     border: 2px solid #1db954;

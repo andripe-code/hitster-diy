@@ -15,7 +15,12 @@
     <!-- Botão para iniciar a leitura do QR Code -->
     <button id="scan">Escanear QR Code</button>
 
-    <!-- Botões de Play e Pause -->
+    <!-- Mensagem de erro caso não seja um QR válido -->
+    <div id="error-message" style="color: red; display: none;">
+        O QR Code não contém um link válido ou não é do Spotify.
+    </div>
+
+    <!-- Botões de Play e Pause (invisíveis até que o QR seja lido corretamente) -->
     <div id="controls" style="display:none;">
         <button id="playBtn">Play</button>
         <button id="pauseBtn">Pause</button>
@@ -25,9 +30,4 @@
     <div id="spotifyPlayerContainer"></div>
 
     <!-- Link para a biblioteca jsQR -->
-    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
-
-    <!-- Nosso script.js -->
-    <script src="script.js"></script>
-</body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script
