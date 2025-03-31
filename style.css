@@ -1,56 +1,233 @@
+/* ===== RESET E ESTILOS GERAIS ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --spotify-green: #1DB954;
+  --spotify-dark: #191414;
+  --spotify-light: #FFFFFF;
+  --error-red: #FF4444;
+  --warning-yellow: #FFF3CD;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 20px;
-  }
-  
+  font-family: 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 
+               'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  background-color: #f5f5f5;
+  color: #333;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.container {
+  width: 100%;
+  max-width: 500px;
+  background: var(--spotify-light);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== CABEÇALHO ===== */
+h1 {
+  color: var(--spotify-green);
+  margin-bottom: 15px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ===== MENSAGENS DE STATUS ===== */
+#status {
+  font-weight: 600;
+  margin: 20px 0;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(29, 185, 84, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.error-message {
+  background-color: rgba(255, 68, 68, 0.1);
+  color: var(--error-red);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: 600;
+}
+
+.mobile-warning {
+  background-color: var(--warning-yellow);
+  color: #856404;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== BOTÕES ===== */
+button {
+  background-color: var(--spotify-green);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin: 8px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 120px;
+  box-shadow: 0 4px 8px rgba(29, 185, 84, 0.3);
+}
+
+button:hover {
+  background-color: #1ed760;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(29, 185, 84, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button i {
+  font-size: 1.2rem;
+}
+
+#login-btn {
+  background-color: var(--spotify-dark);
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  box-shadow: 0 4px 8px rgba(25, 20, 20, 0.3);
+}
+
+#login-btn:hover {
+  background-color: #000;
+}
+
+#mobile-play-link {
+  display: inline-block;
+  background-color: var(--spotify-green);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(29, 185, 84, 0.3);
+}
+
+#mobile-play-link:hover {
+  background-color: #1ed760;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(29, 185, 84, 0.4);
+}
+
+/* ===== CONTROLES DA CÂMERA ===== */
+#camera-container {
+  margin: 20px 0;
+  position: relative;
+}
+
+#camera {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 12px;
+  border: 3px solid var(--spotify-green);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #000;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 25px 0;
+}
+
+/* ===== EFEITOS ESPECIAIS ===== */
+.fa-spin {
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 600px) {
   .container {
-    max-width: 500px;
-    margin: 0 auto;
-    background: white;
-    padding: 20px;
+    padding: 20px 15px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
   h1 {
-    color: #1DB954; /* Verde do Spotify */
-  }
-  
-  .controls {
-    margin: 20px 0;
+    font-size: 1.8rem;
   }
   
   button {
-    background: #1DB954;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    min-width: 100px;
   }
   
-  button:hover {
-    background: #1ed760;
+  #login-btn {
+    padding: 12px 20px;
   }
   
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 400px) {
   #camera {
-    width: 100%;
-    max-width: 300px;
-    border: 2px solid #1DB954;
-    border-radius: 5px;
-    margin: 10px 0;
+    max-width: 250px;
   }
-  
-  #camera-container {
-    margin: 20px 0;
-  }
-  
-  #status {
-    font-weight: bold;
-    color: #333;
-  }
+}
+
+/* ===== CLASSES UTILITÁRIAS ===== */
+.hidden {
+  display: none !important;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 1.5s infinite;
+}
